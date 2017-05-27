@@ -4,6 +4,12 @@ import struct
 import random
 import sys
 
+class File_Loader:
+    def __init__(self):
+        pass
+    def get_string():
+        return None
+
 def get_ip(interface):
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
