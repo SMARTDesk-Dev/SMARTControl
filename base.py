@@ -8,22 +8,22 @@ import mysql.connector as mc
 
 
 class Database:             # Watch out here:  N O  Errors caught!
-    con = None
+    _con = None
     def __init__(self):
         pass
 
     def connect(database_ini_file, section):
-        Database.con = mc.connect(host=File_Loader.get_config_string(database_ini_file, section, 'host'),
+        Database._con = mc.connect(host=File_Loader.get_config_string(database_ini_file, section, 'host'),
                                   port=File_Loader.get_config_string(database_ini_file, section, 'port'),
                                   user=File_Loader.get_config_string(database_ini_file, section, 'user'),
                                   password=File_Loader.get_config_string(database_ini_file, section, 'password'),
                                   database=File_Loader.get_config_string(database_ini_file, section, 'database'))
 
     def disconnect():
-        Database.con.disconnect()
+        Database._con.disconnect()
 
     def send_query(query):
-        cursor = Database.con.cursor()
+        cursor = Database._con.cursor()
         cursor.execute(query)
         return cursor.fetchall()
 
