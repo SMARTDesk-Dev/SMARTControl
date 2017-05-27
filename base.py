@@ -83,5 +83,12 @@ def test_method():  # This method is only for testing the functionality of all t
     print(create_random(4))
     File_Loader.set_config_string('yourpath', 'Hallo', 'Test', '42')
     print(File_Loader.get_config_string('yourpath', 'Hallo', 'Test'))
+    try:
+        Database.connect()
+        Database.send_query("SELECT* FROM tablehere")
+        Database.disconnect()
+    except:
+        print("something went wrong")
+
 
 test_method()       # This method is only for testing the functionality of all the other methods of that module
