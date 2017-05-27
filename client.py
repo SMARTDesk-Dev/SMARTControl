@@ -1,14 +1,34 @@
+from configparser import ConfigParser
 import socket
-import fcntl
+import fcntl    # does only work under Linux but not under windows
 import struct
 import random
 import sys
 
+
 class File_Loader:
     def __init__(self):
         pass
-    def get_string():
-        return None
+
+    def get_config_string(config_file, section, attribute):
+        config = ConfigParser.read(config_file)
+        config.sections()
+        if not config.has_section(section):
+            raise
+        result = config[section][attribute]
+        if result is not None:
+            return result
+        else:
+            raise
+
+    def set_config_string(config_file, section, attribute, value):
+        config = ConfigParser.read(config_file)
+        if config.has_section(section) is False:
+            config.add_section(section)
+        config.set(section, attribute, value)
+        config.write()
+        print(attribute + " from " + section + " is now " + value)
+
 
 def get_ip(interface):
     try:
@@ -32,7 +52,14 @@ def create_random(length):
         get_char = unichr
     except:
         get_char = chr
-
     alphabet = [get_char(ch) for ch in range(sys.maxunicode)]
-
     return ''.join(random.choice(alphabet) for i in range(length))
+
+def test_method():  # This method is only for testing the functionality of all the other methods of that module
+    print(get_mac("eth0"))
+    print(get_ip("eth0"))
+    print(create_random(4))
+    File_Loader.set_config_string('yourpath', 'Hallo', 'Test', '42')
+    print(File_Loader.get_config_string('yourpath', 'Hallo', 'Test'))
+
+test_method()       # This method is only for testing the functionality of all the other methods of that module
