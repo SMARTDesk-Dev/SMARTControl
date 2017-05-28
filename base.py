@@ -4,7 +4,7 @@ import fcntl    # does only work under Linux but not under windows
 import struct
 import random
 import sys
-import mysql.connector as mc
+import mysql.connector as mc    # you will need to install mysql for this import
 
 
 class Database:             # Watch out here:  N O  Errors caught!
@@ -81,10 +81,10 @@ def test_method():  # This method is only for testing the functionality of all t
     print(get_mac("eth0"))
     print(get_ip("eth0"))
     print(create_random(4))
-    File_Loader.set_config_string('yourpath', 'Hallo', 'Test', '42')
-    print(File_Loader.get_config_string('yourpath', 'Hallo', 'Test'))
+    File_Loader.set_config_string('yourpath', 'Hello', 'Test', '42')
+    print(File_Loader.get_config_string('yourpath', 'Hello', 'Test'))
     try:
-        Database.connect()
+        Database.connect("hereinifile", "heresection")
         Database.send_query("SELECT* FROM tablehere")
         Database.disconnect()
     except:
