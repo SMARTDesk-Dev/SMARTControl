@@ -1,3 +1,4 @@
+# This module will be a pool of useful methods and classes
 from configparser import ConfigParser
 import socket
 import fcntl    # does only work under Linux but not under windows
@@ -22,10 +23,18 @@ class Database:             # Watch out here:  N O  Errors caught!
     def disconnect():
         Database._con.disconnect()
 
-    def send_query(query):
+    def send_query(query):      # This method will be the method to send SQL commands and will also return all given results
         cursor = Database._con.cursor()
         cursor.execute(query)
         return cursor.fetchall()
+
+
+class NetworkManager:           # This class will secure the communication with other Devices in the Network
+    def __init__(self):
+        pass
+
+    def send_packet(target_ip, target_port, packet):
+        pass
 
 
 class File_Loader:
