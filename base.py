@@ -8,8 +8,21 @@ import sys
 import mysql.connector as mc    # you will need to install mysql for this import
 
 
-class Database:             # Watch out here:  N O  Errors caught!
-    _con = None
+running_threads[]
+
+class Crypter:              # This class will encrypt and decrypt a text for network traffic
+    def __init__(self):
+        pass
+
+    def encrypt(password, key, text):
+        pass
+
+    def decrypt(password, key, text):
+        pass
+
+
+class Database:             # Watch out here:  N O  Errors caught! In this class every Database related aspect is done
+    _con = None             # Don't use this variable but the methods which are also in this class
     def __init__(self):
         pass
 
@@ -34,14 +47,44 @@ class NetworkManager:           # This class will secure the communication with 
         pass
 
     def send_packet(target_ip, target_port, packet):
-        pass
+        s = socket.socket()
+        s.connect((target_ip, target_port))
+        if packet.length > 1024:
+            raise
+        s.send(packet)
+        s.close()
+
+    def listen(port):           # I maybe have to open a new thread which gets all commands in offline time. But that needs some testing time
+        s = socket.socket()
+        host = socket.gethostname()
+        s.bind((host, port))
+
+        s.listen(10000000)
+        result = s.recv(1024)
+        s.close()
+        return result
 
 
-class File_Loader:
+class Timer(threading.Thread):
+    def __init__(self, threadID, name, time, method_to_execute):        # time = waiting_time
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.time = time
+        self.execute = method_to_execute
+
+    def run(self):
+        running_threads.append(self.name)
+        while True:
+            time.sleep(self.time)                                       # The waiting_time applies here
+            self.execute()                                              # Execute method which is selected in the constructor
+
+
+class File_Loader:              # To make life easier with files use the methods in this class (up to this moment there is only the ConfigParser-Reader and -Writer because no other type is needed)
     def __init__(self):
         pass
 
-    def get_config_string(config_file, section, attribute):     # watch out here because of raised thingies :=)
+    def get_config_string(config_file, section, attribute):     # Watch out here because of raised thingies :=). Gives back a string or raises
         config = ConfigParser.read(config_file)
         config.sections()
         if not config.has_section(section):
@@ -52,7 +95,7 @@ class File_Loader:
         else:
             raise
 
-    def set_config_string(config_file, section, attribute, value):
+    def set_config_string(config_file, section, attribute, value):      # Watch out here because no errors are caught
         config = ConfigParser.read(config_file)
         if config.has_section(section) is False:
             config.add_section(section)
@@ -61,7 +104,7 @@ class File_Loader:
         print(attribute + " from " + section + " is now " + value)
 
 
-def get_ip(interface):
+def get_ip(interface):      # Gives back the ip-address for the given interface
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         ip = socket.inet_ntoa(fcntl.ioctl(s.fileno, 0x8915, struct.pack('256s', interface[:15]))[20:24])
@@ -69,7 +112,7 @@ def get_ip(interface):
         ip = "0.0.0.0"
     return ip
 
-def get_mac(interface):
+def get_mac(interface):     # Gives back the mac-address for the given interface or if the interface is not availeble 00:00:00:00:00:00
     try:
         mac = open('sys/class/net/' + interface + '/address').readline()
     except:
@@ -77,7 +120,7 @@ def get_mac(interface):
         mac = "00:00:00:00:00:00"
     return mac
 
-def create_random(length):
+def create_random(length):  # This method gives back a random string for the key and the password which will be generated every time when the module starts
     random.seed()
     try:
         get_char = unichr
@@ -86,7 +129,7 @@ def create_random(length):
     alphabet = [get_char(ch) for ch in range(sys.maxunicode)]
     return ''.join(random.choice(alphabet) for i in range(length))
 
-def test_method():  # This method is only for testing the functionality of all the other methods of that module
+def test_method():          # This method is only for testing the functionality of all the other methods of that module
     print(get_mac("eth0"))
     print(get_ip("eth0"))
     print(create_random(4))
@@ -100,4 +143,4 @@ def test_method():  # This method is only for testing the functionality of all t
         print("something went wrong")
 
 
-test_method()       # This method is only for testing the functionality of all the other methods of that module
+test_method()               # This method is only for testing the functionality of all the other methods of that module
