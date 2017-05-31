@@ -8,7 +8,7 @@ import sys
 import mysql.connector as mc    # you will need to install mysql for this import
 
 
-running_threads[]
+running_threads[]           # You will have to delete all threads you stop from this list
 
 class Crypter:              # This class will encrypt and decrypt a text for network traffic
     def __init__(self):
@@ -46,7 +46,7 @@ class NetworkManager:           # This class will secure the communication with 
     def __init__(self):
         pass
 
-    def send_packet(target_ip, target_port, packet):
+    def send_packet(target_ip, target_port, packet):    # Sends the given packet to a serer
         s = socket.socket()
         s.connect((target_ip, target_port))
         if packet.length > 1024:
