@@ -1,5 +1,7 @@
 # This module will be a pool of useful methods and classes
 from configparser import ConfigParser
+from Crypto.Cipher import AES
+from Crypto import Random
 import socket
 import fcntl    # does only work under Linux but not under windows
 import struct
@@ -14,11 +16,20 @@ class Crypter:              # This class will encrypt and decrypt a text for net
     def __init__(self):
         pass
 
-    def encrypt(password, key, text):
-        pass
+    def pad(s):
+        return s + b"\0" * (AES.block_size - len(s) % AES.block_size)
 
-    def decrypt(password, key, text):
-        pass
+    def encrypt(key, text):
+        text = pad(text)
+        IV = Random.new().read(AES.block_size)
+        cipher = AES.new(key, AES.MODE_CBC, IV)
+        return IV + cipher.encrypt(message)
+
+    def decrypt(key, text):
+        IV = text[:AES.block_size]
+        cipher = AES.new(key, AES.MODE_CBC, IV)
+        plaintext = cipher.decrypt(text[AES.block_size:])
+        return text.rstrip(b"\0")
 
 
 class Database:             # Watch out here:  N O  Errors caught! In this class every Database related aspect is done
@@ -66,7 +77,7 @@ class NetworkManager:           # This class will secure the communication with 
 
 
 class Timer(threading.Thread):
-    def __init__(self, threadID, name, time, method_to_execute):        # time = waiting_time
+    def __init__(self, threadID, name, time, method_to_execute):        # time = waiting_time -> the time until the code will be executed again
         threading.Thread.__init__(self)
         self.threadID = threadID
         self.name = name
@@ -105,24 +116,24 @@ class File_Loader:              # To make life easier with files use the methods
 
 
 def get_ip(interface):      # Gives back the ip-address for the given interface
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        ip = socket.inet_ntoa(fcntl.ioctl(s.fileno, 0x8915, struct.pack('256s', interface[:15]))[20:24])
-    except:
-        ip = "0.0.0.0"
+#    try:                   # TODO: Decide if error catches should be in the module where it is needed
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    ip = socket.inet_ntoa(fcntl.ioctl(s.fileno, 0x8915, struct.pack('256s', interface[:15]))[20:24])
+#    except:
+#        ip = "0.0.0.0"
     return ip
 
 def get_mac(interface):     # Gives back the mac-address for the given interface or if the interface is not availeble 00:00:00:00:00:00
-    try:
-        mac = open('sys/class/net/' + interface + '/address').readline()
-    except:
-        # TODO: Beautiful error message
-        mac = "00:00:00:00:00:00"
+#    try:                   # TODO: Decide if error catches should be in the module where it is needed
+    mac = open('sys/class/net/' + interface + '/address').readline()
+#    except:
+#        # TODO: Beautiful error message
+#        mac = "00:00:00:00:00:00"
     return mac
 
-def create_random(length):  # This method gives back a random string for the key and the password which will be generated every time when the module starts
+def create_random(length):  # This method gives back a random string for the key and the password which will be generated every time when the module starts # TODO: test method (not shure if it works)
     random.seed()
-    try:
+    try:                    # If unichr is not supported/available then the normal char is used
         get_char = unichr
     except:
         get_char = chr
