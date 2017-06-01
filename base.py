@@ -1,6 +1,6 @@
 # This module will be a pool of useful methods and classes
 from configparser import ConfigParser
-from Crypto.Cipher import AES
+from Crypto.Cipher import AES   # pychrypto must be installed for that
 from Crypto import Random
 import socket
 import fcntl    # does only work under Linux but not under windows
@@ -47,6 +47,12 @@ class Database:             # Watch out here:  N O  Errors caught! In this class
     def disconnect():
         Database._con.disconnect()
 
+    def is_connected():
+        if _con.open:
+            return True
+        else:
+            return False
+
     def send_query(query):      # This method will be the method to send SQL commands and will also return all given results
         cursor = Database._con.cursor()
         cursor.execute(query)
@@ -83,6 +89,14 @@ class Timer(threading.Thread):
         self.name = name
         self.time = time
         self.execute = method_to_execute
+        self._stop_event = threading.Event()
+
+    def stop(self):
+        self._stop_event.set()
+        running_threads.remove(self.name)
+
+    def stopped(self):
+        return self._stop_event.is_set()
 
     def run(self):
         running_threads.append(self.name)
