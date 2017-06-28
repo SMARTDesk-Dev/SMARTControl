@@ -1,5 +1,6 @@
 import base
 
+print = Logger.log(print)
 
 class NetworkManager(base.NetworkManager):          # A class which extends the base.py's NetworkManager with a Listener and some other things
     def __init__(self):

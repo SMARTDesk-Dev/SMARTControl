@@ -10,7 +10,9 @@ import sys
 import mysql.connector as mc    # you will need to install mysql for this import
 
 
-running_threads[]           # You will have to delete all threads you stop from this list
+running_threads = []           # You will have to delete all threads you stop from this list
+print = Logger.log(print)
+
 
 class Crypter:              # This class will encrypt and decrypt a text for network traffic
     def __init__(self):
@@ -127,6 +129,15 @@ class File_Loader:              # To make life easier with files use the methods
         config.set(section, attribute, value)
         config.write()
         print(attribute + " from " + section + " is now " + value)
+
+
+class Logger:                                                       # This class is implemented for a later coming Logger. If here you can also change the output for example to print a date
+    def __init__(self):
+        pass
+    def log(func):
+        func(*args, **kwargs)
+
+
 
 
 def get_ip(interface):      # Gives back the ip-address for the given interface

@@ -42,7 +42,7 @@ class CommandListener(threading.Thread):       # This class allows you to Listen
 
 
 def setup_client(config, key, device):      # initializes some useful stuff -> TODO: This method is not that clean written maybe I will change it later
-    result = base.Database.send_query("SELECT ip, port FROM " + base.File_Loader.get_config_string(config[0], config[1], "table") + " WHERE type=\'mas\'"))
+    result = base.Database.send_query("SELECT ip, port FROM " + base.File_Loader.get_config_string(config[0], config[1], "table") + " WHERE type=\'mas\'")
     self.master_ip_address = result[0]
     self.master_port = result[1]
     self.key = key
@@ -50,4 +50,4 @@ def setup_client(config, key, device):      # initializes some useful stuff -> T
     self.config = config
 
 def refresher():            # Tells the master that a client is still alive
-    base.NetworkManager.send_packet(master_ip_address, master_port, base.Crypter.encrypt(key, base.get_ip(base.File_Loader.get_config_string(config[0], config[2], "mac")) + base.get_mac(base.File_Loader.get_config_string(config[0], config[2], "ip")) + device)))
+    base.NetworkManager.send_packet(master_ip_address, master_port, base.Crypter.encrypt(key, base.get_ip(base.File_Loader.get_config_string(config[0], config[2], "mac")) + base.get_mac(base.File_Loader.get_config_string(config[0], config[2], "ip")) + device))
