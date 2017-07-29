@@ -4,7 +4,7 @@ import client
 import time
 
 
-print = Logger.log(print)
+print = Logger.log(print)                           # If Logger will be added print is already send through Logger
 
 try:
     key = base.create_random(32)

@@ -1,6 +1,6 @@
 import base
 
-print = Logger.log(print)
+print = Logger.log(print)                           # If Logger will be added print is already send through Logger
 
 class NetworkManager(base.NetworkManager):          # A class which extends the base.py's NetworkManager with a Listener and some other things
     def __init__(self):

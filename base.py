@@ -11,7 +11,7 @@ import mysql.connector as mc    # you will need to install mysql for this import
 
 
 running_threads = []           # You will have to delete all threads you stop from this list
-print = Logger.log(print)
+print = Logger.log(print)      # If some idiot programmer thinks that he will need a print in this module it will also be sent to the Logger class 
 
 
 class Crypter:              # This class will encrypt and decrypt a text for network traffic
